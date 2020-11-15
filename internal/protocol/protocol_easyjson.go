@@ -1696,7 +1696,7 @@ func easyjsonE4425964DecodeGithubComZikaerohCodiesInternalProtocol17(in *jlexer.
 		}
 		switch key {
 		case "method":
-			out.Method = ClientMethod(in.StringIntern())
+			out.Method = ClientMethod(in.String())
 		case "version":
 			out.Version = int(in.Int())
 		case "params":
