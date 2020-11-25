@@ -19,7 +19,8 @@
     "rules": {
         "eqeqeq": "error",
         "no-undef": 0,
-        "simple-import-sort/sort": "warn",
+        "simple-import-sort/imports": "warn",
+        "simple-import-sort/exports": "warn",
         "@typescript-eslint/explicit-function-return-type": 0,
         "@typescript-eslint/no-empty-interface": 0,
         "@typescript-eslint/no-empty-function": 0,
