@@ -153,7 +153,7 @@ func main() {
 					var err error
 					room, err = srv.CreateRoom(ctx, req.RoomName, req.RoomPass)
 					if err != nil {
-						switch err {
+						switch err { //nolint:errorlint
 						case server.ErrRoomExists:
 							responder.Respond(w,
 								responder.Status(http.StatusBadRequest),
@@ -310,4 +310,8 @@ func prometheusHandler() http.Handler {
 	mux := http.NewServeMux()
 	mux.Handle("/metrics", promhttp.Handler())
 	return mux
+}
+
+func stringPtr(s string) *string {
+	return &s
 }
