@@ -60,19 +60,17 @@ export const AboutButton = (props: { style?: React.CSSProperties }) => {
                     <Paper className={classes.paper}>
                         <h2>How to play</h2>
                         <p>
-                            In Codenames, spymasters give one word clues pointing to multiple words on the board, as
-                            well as the number of words corresponding to that clue (for example, &quot;animal 3&quot;).
-                            Their teammates then try to guess the words while avoiding the opposing team&apos;s, and may
-                            guess as many times as the words the spymaster gave in their clue, plus an additional guess.
+                            In codies, spymasters give one word clues pointing to multiple words on the board, as well
+                            as the number of words corresponding to that clue (for example, &quot;animal 3&quot;). Their
+                            teammates then try to guess the words while avoiding the opposing team&apos;s, and may guess
+                            as many times as the words the spymaster gave in their clue, plus an additional guess.
                         </p>
                         <h2>About this site</h2>
                         <p>
                             This site was created by Zikaeroh (
                             <NewPageLink href="https://github.com/zikaeroh">GitHub</NewPageLink>,{' '}
                             <NewPageLink href="https://www.twitch.tv/zikaeroh">Twitch</NewPageLink>,{' '}
-                            <NewPageLink href="https://twitter.com/zikaeroh">Twitter</NewPageLink>). It&apos;s a new
-                            creation, but takes heavy inspiration from the wonderful{' '}
-                            <NewPageLink href="https://github.com/Joooop/codenames.plus">codenames.plus</NewPageLink>.
+                            <NewPageLink href="https://twitter.com/zikaeroh">Twitter</NewPageLink>).
                         </p>
                         <p>
                             You can find this site&apos;s code on{' '}
