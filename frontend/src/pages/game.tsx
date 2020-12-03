@@ -12,6 +12,8 @@ import { Loading } from './loading';
 
 const socketUrl = websocketUrl('/api/ws');
 
+const timeSyncInterval = 15 * 60 * 1000; // 15 minutes
+
 function useSender(dispatch: (action: PartialClientNote) => void): Sender {
     return React.useMemo<Sender>(() => {
         return {
@@ -133,7 +135,7 @@ function useSyncedServerTime() {
     React.useEffect(() => {
         const interval = window.setInterval(() => {
             syncTime();
-        }, 10 * 60 * 1000);
+        }, timeSyncInterval);
         return () => window.clearInterval(interval);
     }, [syncTime]);
 

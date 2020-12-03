@@ -20,7 +20,11 @@ import (
 	"nhooyr.io/websocket/wsjson"
 )
 
-const maxRooms = 1000
+const (
+	maxRooms      = 1000
+	pruneInterval = 5 * time.Minute
+	pruneAge      = 3 * time.Minute
+)
 
 var (
 	ErrRoomExists   = errors.New("server: rooms exist")
@@ -61,7 +65,7 @@ func (s *Server) Run(ctx context.Context) error {
 	s.ctx = ctx
 
 	close(s.ready)
-	ticker := time.NewTicker(5 * time.Minute)
+	ticker := time.NewTicker(pruneInterval)
 	defer ticker.Stop()
 
 	for {
@@ -160,7 +164,7 @@ func (s *Server) prune(ctx context.Context) {
 
 	for name, room := range s.rooms {
 		lastSeen := room.lastSeen.Load().(time.Time)
-		if time.Since(lastSeen) > 10*time.Minute {
+		if time.Since(lastSeen) > pruneAge {
 			toRemove = append(toRemove, name)
 		}
 	}
