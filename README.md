@@ -9,4 +9,4 @@ Featuring:
 -   Responsiveness for mobile play
 -   And more!
 
-![Game board](/docs/screenshot1.png?raw=true 'Game board')
+![Game board](/.github/img/screenshot1.png?raw=true 'Game board')
