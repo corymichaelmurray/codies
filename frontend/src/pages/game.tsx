@@ -4,6 +4,7 @@ import useWebSocket from 'react-use-websocket';
 import { DeepReadonly } from 'ts-essentials';
 
 import { assertIsDefined, assertNever, noop, reloadOutdatedPage, websocketUrl } from '../common';
+import { setIntervalWithJitter } from '../common/interval';
 import { useServerTime } from '../hooks';
 import { version as codiesVersion } from '../metadata.json';
 import { ClientNote, PartialClientNote, ServerNote, State, StatePlayer, TimeResponse, WordPack } from '../protocol';
@@ -133,10 +134,7 @@ function useSyncedServerTime() {
     }, [setOffset]);
 
     React.useEffect(() => {
-        const interval = window.setInterval(() => {
-            syncTime();
-        }, timeSyncInterval);
-        return () => window.clearInterval(interval);
+        return setIntervalWithJitter(syncTime, timeSyncInterval, timeSyncInterval / 10);
     }, [syncTime]);
 
     return syncTime;
