@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"math/rand"
+	"net"
 	"net/http"
 	"os"
 	"time"
@@ -292,7 +293,11 @@ func checkVersion(next http.Handler) http.Handler {
 }
 
 func runServer(ctx context.Context, g *errgroup.Group, addr string, handler http.Handler) {
-	httpSrv := http.Server{Addr: addr, Handler: handler}
+	httpSrv := http.Server{
+		Addr:        addr,
+		Handler:     handler,
+		BaseContext: func(_ net.Listener) context.Context { return ctx },
+	}
 
 	g.Go(func() error {
 		<-ctx.Done()
