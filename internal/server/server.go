@@ -326,6 +326,12 @@ var errMissingPlayer = errors.New("missing player during handleNote")
 
 //nolint:gocyclo
 func (r *Room) handleNote(ctx context.Context, playerID game.PlayerID, note *protocol.ClientNote) error {
+	start := time.Now()
+	defer func() {
+		since := time.Since(start)
+		metricHandleDuration.Observe(since.Seconds())
+	}()
+
 	r.mu.Lock()
 	defer r.mu.Unlock()
 

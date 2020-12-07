@@ -40,4 +40,12 @@ var (
 		Name:      "handle_error_total",
 		Help:      "Total number of handle errors.",
 	})
+
+	metricHandleDuration = promauto.NewHistogram(prometheus.HistogramOpts{
+		Namespace: "codies",
+		Subsystem: "codies",
+		Name:      "handle_seconds",
+		Help:      "Time spent in handler function.",
+		Buckets:   []float64{.00025, .0005, .001, .0025, .005, .01, .025, .05, .1, .25, .5, 1, 2.5, 5, 10},
+	})
 )
