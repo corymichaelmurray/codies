@@ -3,8 +3,9 @@ module github.com/zikaeroh/codies
 go 1.14
 
 require (
-	github.com/go-chi/chi v4.1.2+incompatible
+	github.com/go-chi/chi v1.5.1
 	github.com/jessevdk/go-flags v1.4.1-0.20181221193153-c0795c8afcf4
+	github.com/klauspost/compress v1.11.3 // indirect
 	github.com/mailru/easyjson v0.7.6
 	github.com/markbates/pkger v0.17.1
 	github.com/posener/ctxutil v1.0.0
