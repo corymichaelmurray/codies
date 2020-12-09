@@ -82,11 +82,21 @@ interface CenterTextProps {
 
 const CenterText = ({ winner, timer, turn, myTurn }: DeepReadonly<CenterTextProps>) => {
     const classes = useCenterStyles();
-    const [countdown, setCountdown] = React.useState<number | undefined>();
-    const { now } = useServerTime();
+    const [countdown, setCountdown2] = React.useState<number | undefined>();
+    const { now, addRef, delRef } = useServerTime();
     const deadline = timer?.turnEnd;
 
     React.useEffect(() => {
+        const setCountdown = (value: number | undefined) => {
+            if (isDefined(countdown) && !isDefined(value)) {
+                addRef();
+            } else if (!isDefined(countdown) && isDefined(value)) {
+                delRef();
+            }
+
+            setCountdown2(value);
+        };
+
         const updateCountdown = () => {
             if (isDefined(winner)) {
                 setCountdown(undefined);
@@ -120,7 +130,7 @@ const CenterText = ({ winner, timer, turn, myTurn }: DeepReadonly<CenterTextProp
         }, 200);
 
         return () => window.clearInterval(interval);
-    }, [countdown, winner, deadline, now]);
+    }, [countdown, winner, deadline, now, addRef, delRef]);
 
     const centerText = React.useMemo(() => {
         const text = isDefined(winner)

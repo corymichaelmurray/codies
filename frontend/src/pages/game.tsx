@@ -3,17 +3,14 @@ import * as React from 'react';
 import useWebSocket from 'react-use-websocket';
 import { DeepReadonly } from 'ts-essentials';
 
-import { assertIsDefined, assertNever, noop, reloadOutdatedPage, websocketUrl } from '../common';
-import { setIntervalWithJitter } from '../common/interval';
+import { assertIsDefined, assertNever, reloadOutdatedPage, websocketUrl } from '../common';
 import { useServerTime } from '../hooks';
 import { version as codiesVersion } from '../metadata.json';
-import { ClientNote, PartialClientNote, ServerNote, State, StatePlayer, TimeResponse, WordPack } from '../protocol';
+import { ClientNote, PartialClientNote, ServerNote, State, StatePlayer, WordPack } from '../protocol';
 import { GameView, Sender } from './gameView';
 import { Loading } from './loading';
 
 const socketUrl = websocketUrl('/api/ws');
-
-const timeSyncInterval = 15 * 60 * 1000; // 15 minutes
 
 function useSender(dispatch: (action: PartialClientNote) => void): Sender {
     return React.useMemo<Sender>(() => {
@@ -99,47 +96,6 @@ function useWS(roomID: string, nickname: string, dead: () => void, onOpen: () =>
     });
 }
 
-function useSyncedServerTime() {
-    const { setOffset } = useServerTime();
-
-    const syncTime = React.useCallback(() => {
-        const fn = async () => {
-            let bestRTT: number | undefined;
-            let offset = 0;
-
-            for (let i = 0; i < 3; i++) {
-                const before = Date.now();
-                const resp = await fetch('/api/time');
-                const after = Date.now();
-
-                const body = await resp.json();
-                if (resp.ok) {
-                    const rtt = (after - before) / 2;
-
-                    if (bestRTT !== undefined && rtt > bestRTT) {
-                        continue;
-                    }
-
-                    bestRTT = rtt;
-
-                    const t = TimeResponse.parse(body);
-                    const serverTime = t.time.getTime() + rtt;
-                    offset = serverTime - Date.now();
-                }
-            }
-
-            setOffset(offset);
-        };
-        fn().catch(noop);
-    }, [setOffset]);
-
-    React.useEffect(() => {
-        return setIntervalWithJitter(syncTime, timeSyncInterval, timeSyncInterval / 10);
-    }, [syncTime]);
-
-    return syncTime;
-}
-
 type StateAction = { method: 'setState'; state: State } | PartialClientNote;
 
 function useStateReducer(sendNote: (r: ClientNote) => void) {
@@ -178,7 +134,7 @@ export interface GameProps {
 export const Game = (props: DeepReadonly<GameProps>) => {
     const nickname = React.useRef(props.nickname); // Preserve a nickname for use in reconnects.
 
-    const syncTime = useSyncedServerTime();
+    const { syncTime } = useServerTime();
     const { sendJsonMessage, lastJsonMessage } = useWS(props.roomID, nickname.current, props.leave, syncTime);
 
     const reducer = useStateReducer(sendJsonMessage);
