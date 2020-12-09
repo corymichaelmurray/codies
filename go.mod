@@ -16,7 +16,7 @@ require (
 	github.com/zikaeroh/ctxlog v0.0.0-20200613043947-8791c8613223
 	go.uber.org/atomic v1.7.0
 	go.uber.org/zap v1.16.0
-	golang.org/x/sync v0.0.0-20201020160332-67f06af15bc9
+	golang.org/x/sync v0.0.0-20201207232520-09787c993a3a
 	gotest.tools/v3 v3.0.3
 	nhooyr.io/websocket v1.8.6
 )
