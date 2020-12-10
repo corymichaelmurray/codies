@@ -92,8 +92,16 @@ func main() {
 	r.Use(middleware.Recoverer)
 	r.NotFound(staticHandler().ServeHTTP)
 
+	// API group
 	r.Group(func(r chi.Router) {
 		r.Use(middleware.NoCache)
+
+		r.Use(func(next http.Handler) http.Handler {
+			return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				metricRequestPath.WithLabelValues(r.URL.Path).Inc()
+				next.ServeHTTP(w, r)
+			})
+		})
 
 		r.Get("/api/time", func(w http.ResponseWriter, r *http.Request) {
 			responder.Respond(w, responder.Body(&protocol.TimeResponse{Time: time.Now()}))
@@ -247,6 +255,14 @@ func staticHandler() http.Handler {
 	fsh := http.FileServer(fs)
 
 	r := chi.NewMux()
+
+	r.Use(func(next http.Handler) http.Handler {
+		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			metricRequestPath.WithLabelValues("static").Inc()
+			next.ServeHTTP(w, r)
+		})
+	})
+
 	r.Use(middleware.Compress(5))
 
 	r.Handle("/static/*", fsh)
