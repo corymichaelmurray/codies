@@ -344,7 +344,22 @@ func (r *Room) AddPack(name string, wds []string) {
 		List:   words.NewList(wds),
 	}
 	r.WordLists = append(r.WordLists, list)
+	// let x = r.WordLists => r.WordLists.filter((v,i) => r.WordLists.indexOf(v) === i)
+	// x(r.WordLists);
 	r.Version++
+}
+
+func removeDupes(wordSlice []string) []string{
+	keys := make(map[string]bool)
+	list := []int{}
+
+	for _, entry := range wordSlice{
+		if _, value := keys[entry]; !value{
+			keys[entry] = true
+			list = append(list, entry)
+		}
+	}
+	return list
 }
 
 func (r *Room) RemovePack(num int) {
